@@ -6,3 +6,21 @@ nextto(L, R, [_ | Rest]) :- nextto(L, R, Rest).
 neighbors(X, Y, List) :- nextto(X, Y, List).
 neighbors(X, Y, List) :- nextto(Y, X, List).
 
+% add(X, List1, List2) - добавление элемента X в начало List1.
+add(X, List, [X | List]). % (По сути, смысла в этой процедуре нет)
+
+% del(X, List, List1) - удаление элемента X из списка List
+del(X, [X | Tail], Tail).
+del(X, [Y | Tail], [Y | Tail1]) :- del(X, Tail, Tail1).
+
+% insertTo(X, List1, List2) вставки элемента X в любом месте некоторого списка List1 (вернёт несколько результатов - каким бы мог быть список List2 до удаления из него X)
+insertTo(X, List1, List2) :- del(X, List2, List1).
+
+%palindrome(List) - верно, если список читается одинково слева-направо и справа-налево, например [1,2,2,1]
+palindrome(List) :- reverse(List, List).
+
+% evenlength(List) - верно, если в списке чётное количество элементов
+evenlength(List) :- length(List, N), 1 is N mod 2.
+
+% oddlength(List) - верно, если в списке нечётное количество элементов
+oddlength(List) :- length(List, N), 0 is N mod 2.
