@@ -1,1 +1,0 @@
-HelloWorld :- display('Hello World!') , nl.

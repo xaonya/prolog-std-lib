@@ -30,4 +30,3 @@ permutation(List, [Head | Tail]) :- append(V, [Head|U], List), append(V, U, W), 
 
 % sublist(s, List) - является ли список s подсписокм списка List
 sublist(s, List) :- concat(List1, List2, List), concat(s, List3, List2). % можно ли разложить List на List1 и List2, так что s является началом List2, а некоторый List3 его концом
-
