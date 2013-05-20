@@ -30,3 +30,8 @@ permutation(List, [Head | Tail]) :- append(V, [Head|U], List), append(V, U, W), 
 
 % sublist(s, List) - является ли список s подсписокм списка List
 sublist(s, List) :- concat(List1, List2, List), concat(s, List3, List2). % можно ли разложить List на List1 и List2, так что s является началом List2, а некоторый List3 его концом
+
+% flatten(List, FlatList) - приводит список списков List к списку элементов первого уровня
+flatten([Head | Tail], FlatList) :- flatten(Head, FlatHead), flatten(Tail, FlatTail), append(FlatHead, FlatTail, FlatList).
+flatten([], []).
+flatten(X, [X]).

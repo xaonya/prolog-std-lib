@@ -32,6 +32,10 @@ oddlength(List) :- length(List, N), 0 is N mod 2.
 remove([_ | Tail], 1, Tail).
 remove([X | Tail], N, [X | List]) :- N1 is N-1, remove(Tail, N1, List).
 
+% subset(List1, List2) - верно, если множество, состоящее из элементов List1 является подмножеством множества, состоящего из элементов List2
+subset([], _).
+subset([X|Tail], List) :- member(X, List), del(X, List, List1), subset(Tail, List1).
+
 % moveleft(List1, List2) - сдвиг элементов списка List1 влево на один, первый элемент же становится последним
 moveleft([], []).
 moveleft([X | Tile], List) :- append(Tile, [X], List).
@@ -39,9 +43,6 @@ moveleft([X | Tile], List) :- append(Tile, [X], List).
 % moveright(List1, List2) - сдвиг элементов списка List1 вправо на один, последний элемент же становится первым
 moveright([], []).
 moveright(List, [X | Tail]):- length(List, N), last(List, X), remove(List, N, Tail).
-
-% order(X, Y) - Верно, если Y >= X
-order(X, Y) :- X =< Y.
 
 % sorted(List) Проверка того, что список List "отсортирован" по возрастанию
 sorted([_]).
@@ -51,8 +52,8 @@ sorted([X, Y | Tail]) :- order(X, Y), sorted([Y | Tail]).
 nativeSort(List1, List2) :- permutation(List1, List2), sorted(List2), !.
 
 % swap(List1, List2) - Обмен местами двух смежных элементов списка List1, если они не отсортированы
-swap([X, Y|R], [Y, X|R]) :- order(Y, X).
-swap([X|R], [X|R1]) :- swap(R, R1).
+swap([X, Y | R], [Y, X | R]) :- order(Y, X).
+swap([X | R], [X | R1]) :- swap(R, R1).
 
 % bubbleSort(List, SList) - Пузырьковая сортировка
 bubbleSort(List, SList) :- swap(List, MList), !, bubbleSort(MList, SList). 
@@ -60,15 +61,20 @@ bubbleSort(List, List) :- !.
 
 % insertSort(List1, List2) - Сортировка вставками
 insertSort([], []).
-insertSort([X|L], M) :- insertSort(L, N), insertSortx(X, N, M).
-insertSortx(X, [A|L], [A|M]) :- order(A, X), !, insertSortx(X, L, M).
-insertSortx(X, L, [X|L]).
+insertSort([X | L], M) :- insertSort(L, N), insertSortx(X, N, M).
+insertSortx(X, [A | L], [A|M]) :- order(A, X), !, insertSortx(X, L, M).
+insertSortx(X, L, [X | L]).
 
 % split(X, List, Small, Big) - Разбиение списка List на 2 списка Small и Big, таких что в одном списке элементы меньше X, а в другом больше X
-split(X, [A|Tail], [A|Small], Big) :- order(A, X), !, split(X, Tail, Small, Big).
-split(X, [A|Tail], Small, [A|Big]) :- split(X, Tail, Small, Big).
+split(X, [A | Tail], [A | Small], Big) :- order(A, X), !, split(X, Tail, Small, Big).
+split(X, [A | Tail], Small, [A | Big]) :- split(X, Tail, Small, Big).
 split(_, [], [], []).
 
 % quickSort(List1, List2) -  Быстрая сортировка
 quickSort([], []).
 quickSort([H|Tail], S) :- split(H, Tail, Small, Big), quickSort(Small, Small1), quickSort(Big, Big1), append(Small1, [H|Big1], S).
+
+% dividelist(List, List1, List2) - Элементы списка List распределяются в списках List1 и List2 таким образом, что их длинна примерно одинкова
+dividelist([], [], []).
+dividelist([X | Tail],[X | List1], List2) :- oddlength(Tail), !, dividelist(Tail, List1, List2).
+dividelist([X | Tail], List1, [X | List2]) :- evenlength(Tail), dividelist(Tail, List1, List2).

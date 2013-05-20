@@ -1,3 +1,6 @@
+% order(X, Y) - Верно, если Y >= X
+order(X, Y) :- X =< Y.
+
 % minimum(X, Y, M) - M - минимальный элемент среди X и Y
 minimum(X, Y, X) :- X < Y.
 minimum(X, Y, Y) :- Y >= X.
