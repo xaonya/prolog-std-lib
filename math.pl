@@ -1,10 +1,10 @@
 % minimum(X, Y, M) - M - минимальный элемент среди X и Y
-minimum(X, Y, X) :- X <= Y, !.
-minimum(X, Y, Y) :- Y.
+minimum(X, Y, X) :- X < Y.
+minimum(X, Y, Y) :- Y >= X.
 
 % maximum(X, Y, M) - M - максимальный элемент среди X и Y
-maximum(X, Y, X) :- X >= Y, !.
-maximum(X, Y, Y) :- Y.
+maximum(X, Y, X) :- X >= Y.
+maximum(X, Y, Y) :- Y < X.
 
 % factorial(N,F) - процедура вычисления факториала числа N
 factorial(0,1).
